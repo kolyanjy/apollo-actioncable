@@ -11,14 +11,7 @@ class PostView extends Component {
             <div className="card-holder" key={post.id}>
                 <div className="card">
                     <div className="card-header">
-                        <h4>{post.title}</h4>
-                    </div>
-                    <div className="card-body">
-                        <div className="">{post.body}</div>
-                        <div className="comments-section">
-                            <h5>Comments</h5>
-                            <CommentsListingView post={post}/>
-                        </div>
+                        <h4>{JSON.stringify(post)}</h4>
                     </div>
                 </div>
             </div>

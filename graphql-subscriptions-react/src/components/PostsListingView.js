@@ -7,22 +7,34 @@ import './PostsListingView.css';
 import PostView from "./PostView";
 
 const postsQuery = gql`
-    query retrievePostsQuery { 
-        posts { 
+    query orderChanges {
+      orderChanges {
+        id
+        orderWasChanged
+        orderItemsChanges {
+          orderItemWasChanged
+          id
+          changes
+          product {
             id
-            title
-            body
-        } 
+            name
+            
+          }
+        }
+      }
     }
 `;
 
 const postsSubscription = gql`
-    subscription onPostAddedSubscription {
-        postAdded { 
-            id 
-            title 
-            body 
+    subscription OrderChangesSubscription {
+      orderChanged {
+        id
+        orderWasChanged
+        orderItemsChanges {
+          id
+          changes
         }
+      }
     }
 `;
 
@@ -39,10 +51,10 @@ class PostsListingView extends Component {
                     return previous;
                 }
 
-                const newPost = subscriptionData.data.postAdded;
+                const newPost = subscriptionData.data.orderChanged;
 
-                if (!previous.posts.find((post) => post.id === newPost.id)) {
-                    return Object.assign({}, previous, {posts: [newPost, ...previous.posts]});
+                if (!previous.orderChanges.find((post) => post.id === newPost.id)) {
+                    return Object.assign({}, previous, {orderChanges: [newPost, ...previous.orderChanges]});
                 } else {
                     return previous;
                 }
@@ -57,20 +69,17 @@ class PostsListingView extends Component {
                 content = (<div key={'data-loading'}>Data loading! Please wait...</div>);
             } else if (this.props.data.error) {
                 content = (<div key={'error'}>An error occurred. {this.props.data.error}</div>);
-            } else if (this.props.data.posts) {
-                let func = post => (
-                    <PostView post={post} key={post.id.toString()}/>
-                );
-                content = this.props.data.posts.map(func)
+            } else if (this.props.data.orderChanges) {
+                content = <PostView post={this.props.data.orderChanges} key={this.props.data.orderChanges.id}/>
             }
         }
 
         return (
             <div>
-                <h1>Posts</h1>
-                <PostEditorView/>
+                {/* <h1>Posts</h1> */}
+                {/* <PostEditorView/> */}
                 <CSSTransitionGroup
-                    transitionName="posts"
+                    transitionName="orderChanges"
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={300}>
                     {content}

@@ -27,7 +27,7 @@ ADD rails-env.conf /etc/nginx/main.d/rails-env.conf
 ## - build-essential: To ensure certain gems can be compiled
 ## - nodejs: Compile assets
 RUN apt-get update && \
-    apt-get install -qq -y build-essential nodejs mysql-client libmysqlclient-dev --fix-missing --no-install-recommends
+    apt-get install -qq -y build-essential nodejs mysql-client libmysqlclient-dev libnginx-mod-http-headers-more-filter --fix-missing --no-install-recommends
 
 ## Set an environment variable to store where the app is installed to inside
 ## of the Docker image.

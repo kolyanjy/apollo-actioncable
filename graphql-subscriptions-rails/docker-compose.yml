@@ -2,10 +2,10 @@ version: "3.2"
 services:
 
   mysql:
-    image: mysql:latest
+    image: mysql:5.7
     restart: unless-stopped
-    ports:
-      - "3306:3306"
+    # ports:
+    #   - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
@@ -14,8 +14,8 @@ services:
   redis:
     image: redis:3
     restart: unless-stopped
-    ports:
-      - "6379:6379"
+    # ports:
+    #   - "6379:6379"
 
   rails:
     build:
