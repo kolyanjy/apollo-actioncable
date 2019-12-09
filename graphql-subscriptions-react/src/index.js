@@ -19,11 +19,11 @@ let webSocketLink = undefined;
 let httpLink = undefined;
 
 if (process.env.REACT_APP_BACKEND === 'rails') {
-    const authToken = 'a';
-    const orderId = '5408fdcd-7316-42c1-a590-cd43ef010e1f';
-    const cable = ActionCable.createConsumer(`ws://localhost:${RAILS_PORT}/cable?token=${authToken}&order_id=${orderId}`);
-    webSocketLink = new ActionCableLink({cable});
-    httpLink = new HttpLink({uri: `http://localhost:${RAILS_PORT}/graphql`});
+  const authToken = 'a';
+  const orderId = 'ea639308-b418-4d41-a5f9-a176617d9f5d';
+  const cable = ActionCable.createConsumer(`ws://localhost:${RAILS_PORT}/cable?token=${authToken}&order_id=${orderId}`);
+  webSocketLink = new ActionCableLink({cable});
+  httpLink = new HttpLink({uri: `http://localhost:${RAILS_PORT}/graphql`});
 }
 
 // using the ability to split links, you can send data to each link depending on what kind of operation is being sent

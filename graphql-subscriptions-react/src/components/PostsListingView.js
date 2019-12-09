@@ -7,36 +7,89 @@ import './PostsListingView.css';
 import PostView from "./PostView";
 
 const postsQuery = gql`
-    query orderChanges {
-      orderChanges {
-        id
-        orderWasChanged
-        orderItemsChanges {
-          orderItemWasChanged
-          id
-          changes
-          product {
+        query order {
+          order {
             id
-            name
-            
+            subtotal
+            status
+            productsCount
+            itemsCount
+            orderItems {
+              quantity
+              total
+              lastInStock
+              company {
+                name
+              }
+              productVariant {
+                id
+                price
+                salePrice
+                discount
+                mainImage {
+                  imageVariants {
+                    variantUrl(dimensions: w32_h32)
+                  }
+                }
+                product {
+                  name
+                }
+                options {
+                  productOptionType {
+                    position
+                    prototypeOptionType {
+                      optionType {
+                        name
+                      }
+                    }
+                  }
+                  productOptionValue {
+                    position
+                    prototypeOptionValue {
+                      optionValue {
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
-      }
-    }
 `;
 
+// const postsSubscription = gql`
+//     subscription orderItemUpdated {
+//       orderItemUpdated {
+//         id
+//         lastInStock
+//         productVariant {
+//           id
+//           price
+//           inventory
+//         }
+//       }
+//     }
+// `;
+
 const postsSubscription = gql`
-    subscription OrderChangesSubscription {
-      orderChanged {
+subscription orderUpdated {
+  orderUpdated {
+    id
+    status
+    orderItems {
+      id
+      lastInStock
+      productVariant {
         id
-        orderWasChanged
-        orderItemsChanges {
-          id
-          changes
-        }
+        price
+        inventory
       }
     }
+  }
+}
 `;
+
 
 const withPostsData = graphql(postsQuery);
 
@@ -53,8 +106,8 @@ class PostsListingView extends Component {
 
                 const newPost = subscriptionData.data.orderChanged;
 
-                if (!previous.orderChanges.find((post) => post.id === newPost.id)) {
-                    return Object.assign({}, previous, {orderChanges: [newPost, ...previous.orderChanges]});
+                if (!previous.orderItemUpdated.find((post) => post.id === newPost.id)) {
+                    return Object.assign({}, previous, {orderItemUpdated: [newPost, ...previous.orderItemUpdated]});
                 } else {
                     return previous;
                 }
@@ -69,8 +122,8 @@ class PostsListingView extends Component {
                 content = (<div key={'data-loading'}>Data loading! Please wait...</div>);
             } else if (this.props.data.error) {
                 content = (<div key={'error'}>An error occurred. {this.props.data.error}</div>);
-            } else if (this.props.data.orderChanges) {
-                content = <PostView post={this.props.data.orderChanges} key={this.props.data.orderChanges.id}/>
+            } else if (this.props.data.orderItemUpdated) {
+                content = <PostView post={this.props.data.orderItemUpdated} key={this.props.data.orderItemUpdated.id}/>
             }
         }
 
