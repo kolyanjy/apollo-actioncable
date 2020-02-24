@@ -7,55 +7,57 @@ import './PostsListingView.css';
 import PostView from "./PostView";
 
 const postsQuery = gql`
-        query order {
-          order {
+  query currentOrder {
+    currentOrder {
+      id
+      subtotal
+      status
+      productsCount
+      itemsCount
+      orderBundles {
+        company {
+          name
+        }
+        orderItems {
+          quantity
+          total
+          lastInStock
+          productVariant {
             id
-            subtotal
-            status
-            productsCount
-            itemsCount
-            orderItems {
-              quantity
-              total
-              lastInStock
-              company {
-                name
+            price
+            salePrice
+            discount
+            mainImage {
+              imageVariants {
+                variantUrl(dimensions: w32_h32)
               }
-              productVariant {
-                id
-                price
-                salePrice
-                discount
-                mainImage {
-                  imageVariants {
-                    variantUrl(dimensions: w32_h32)
+            }
+            product {
+              name
+            }
+            options {
+              productOptionType {
+                position
+                prototypeOptionType {
+                  optionType {
+                    name
                   }
                 }
-                product {
-                  name
-                }
-                options {
-                  productOptionType {
-                    position
-                    prototypeOptionType {
-                      optionType {
-                        name
-                      }
-                    }
-                  }
-                  productOptionValue {
-                    position
-                    prototypeOptionValue {
-                      optionValue {
-                        name
-                      }
-                    }
+              }
+              productOptionValue {
+                position
+                prototypeOptionValue {
+                  optionValue {
+                    name
                   }
                 }
               }
             }
           }
         }
+      }
+    }
+  }
 `;
 
 // const postsSubscription = gql`
