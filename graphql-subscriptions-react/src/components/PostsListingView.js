@@ -74,19 +74,30 @@ const postsQuery = gql`
 //     }
 // `;
 
+// const postsSubscription = gql`
+// subscription orderUpdated {
+//   orderUpdated {
+//     id
+//     status
+//     orderItems {
+//       id
+//       lastInStock
+//       productVariant {
+//         id
+//         price
+//         inventory
+//       }
+//     }
+//   }
+// }
+// `;
+
 const postsSubscription = gql`
 subscription orderUpdated {
-  orderUpdated {
-    id
-    status
-    orderItems {
-      id
-      lastInStock
-      productVariant {
-        id
-        price
-        inventory
-      }
+  orderChanged {
+    type
+    product {
+      name
     }
   }
 }
@@ -106,10 +117,9 @@ class PostsListingView extends Component {
                     return previous;
                 }
 
-                const newPost = subscriptionData.data.orderChanged;
-
-                if (!previous.orderItemUpdated.find((post) => post.id === newPost.id)) {
-                    return Object.assign({}, previous, {orderItemUpdated: [newPost, ...previous.orderItemUpdated]});
+                const newPost = subscriptionData.data.orderUpdated;
+                if (!previous.orderUpdated.find((post) => post.id === newPost.id)) {
+                    return Object.assign({}, previous, {orderUpdated: [newPost, ...previous.orderUpdated]});
                 } else {
                     return previous;
                 }
@@ -119,13 +129,14 @@ class PostsListingView extends Component {
 
     render() {
         let content = (<div>&nbsp;</div>);
+        console.log(this.props.data);
         if (this.props.data) {
             if (this.props.data.loading) {
                 content = (<div key={'data-loading'}>Data loading! Please wait...</div>);
             } else if (this.props.data.error) {
                 content = (<div key={'error'}>An error occurred. {this.props.data.error}</div>);
-            } else if (this.props.data.orderItemUpdated) {
-                content = <PostView post={this.props.data.orderItemUpdated} key={this.props.data.orderItemUpdated.id}/>
+            } else if (this.props.data.orderUpdated) {
+                content = <PostView post={this.props.data.orderUpdated} key={this.props.data.orderUpdated.id}/>
             }
         }
 
@@ -134,7 +145,7 @@ class PostsListingView extends Component {
                 {/* <h1>Posts</h1> */}
                 {/* <PostEditorView/> */}
                 <CSSTransitionGroup
-                    transitionName="orderChanges"
+                    transitionName="orderUpdated"
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={300}>
                     {content}
