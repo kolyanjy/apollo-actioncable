@@ -60,6 +60,18 @@ const postsQuery = gql`
   }
 `;
 
+// const postsQuery = gql`
+//     query orderChanges {
+//       orderChanges {
+//         type
+//         product {
+//           id
+//           name
+//         }
+//       }
+//     }
+// `;
+
 // const postsSubscription = gql`
 //     subscription orderItemUpdated {
 //       orderItemUpdated {
