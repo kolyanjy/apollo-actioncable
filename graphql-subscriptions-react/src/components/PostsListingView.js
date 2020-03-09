@@ -5,6 +5,7 @@ import PostEditorView from "./PostEditorView";
 import {CSSTransitionGroup} from "react-transition-group";
 import './PostsListingView.css';
 import PostView from "./PostView";
+import { assertDirective } from "graphql";
 
 const postsQuery = gql`
   query currentOrder {
@@ -73,20 +74,6 @@ const postsQuery = gql`
 // `;
 
 // const postsSubscription = gql`
-//     subscription orderItemUpdated {
-//       orderItemUpdated {
-//         id
-//         lastInStock
-//         productVariant {
-//           id
-//           price
-//           inventory
-//         }
-//       }
-//     }
-// `;
-
-// const postsSubscription = gql`
 // subscription orderUpdated {
 //   orderUpdated {
 //     id
@@ -106,14 +93,71 @@ const postsQuery = gql`
 
 const postsSubscription = gql`
 subscription orderUpdated {
-  orderChanged {
+  orderUpdated {
     type
+    order{
+      id
+      status
+      orderBundles {
+        company {
+          name
+        }
+        orderItems {
+          quantity
+          total
+          lastInStock
+          productVariant {
+            id
+            price
+            salePrice
+            discount
+            mainImage {
+              imageVariants {
+                variantUrl(dimensions: w32_h32)
+              }
+            }
+            product {
+              name
+            }
+            options {
+              productOptionType {
+                position
+                prototypeOptionType {
+                  optionType {
+                    name
+                  }
+                }
+              }
+              productOptionValue {
+                position
+                prototypeOptionValue {
+                  optionValue {
+                    name
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     product {
       name
     }
   }
 }
 `;
+  
+// const postsSubscription = gql`
+// subscription orderUpdated {
+//   orderChanged {
+//     type
+//     product {
+//       name
+//     }
+//   }
+// }
+// `;
 
 
 const withPostsData = graphql(postsQuery);

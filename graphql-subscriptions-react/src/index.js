@@ -19,15 +19,17 @@ let webSocketLink = undefined;
 let httpLink = undefined;
 
 if (process.env.REACT_APP_BACKEND === 'rails') {
-  const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODMyNTEwMzQsImFjY291bnRfaWQiOiIwMWQ4NmYzZi01YjhhLTQzZjgtOWQ3NS0wMWM0OTNhZWMyYzAiLCJhY2NvdW50X3R5cGUiOiJCdXllckFjY291bnQiLCJ1aWQiOiIzYjg4NTVjNS1jZTA0LTRiNGUtODFlZi00OThjYTU5ODE5NTciLCJleHAiOjE1ODMyNTEwMzR9.EW70qdrgiKdnLr__-aT1tNsHShdx0v-FYZqd_DnmB_8';
-  // const authToken = '';
-  // const orderId = '6b5a50c9-a915-475a-a18c-8105dea7f269';
-  const orderId = '';
+  // const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODM3Njk5NDEsImFjY291bnRfaWQiOiI2MjdjMjI0Mi1jZDQ0LTQxNTUtOGM5Zi1jOTMyN2JmMjRhZTYiLCJhY2NvdW50X3R5cGUiOiJCdXllckFjY291bnQiLCJ1aWQiOiJiODQ1MGE4NC03NDQ5LTRhZmYtYWQ3NS1iMmMyMDJkNGM3YzYiLCJleHAiOjE1ODM3Njk5NDF9.52SwDb3nbgWBv8qxgP431g8_jxqfjT9-V7rNyY06i8I';
+  const authToken = '';
+
+  const orderId = '7285b998-fd38-4256-909e-2255967eb1f7';
+  // const orderId = '';
   // const cable = ActionCable.createConsumer(`ws://product-marketplace-staging-1578308111.us-east-2.elb.amazonaws.com:${RAILS_PORT}/cable?token=${authToken}&order_id=${orderId}`);
   const cable = ActionCable.createConsumer(`ws://localhost:${RAILS_PORT}/cable?token=${authToken}&order_id=${orderId}`);
   webSocketLink = new ActionCableLink({cable});
-  // httpLink = new HttpLink({ uri: `http://localhost:${RAILS_PORT}/graphql`, headers: { 'Order-ID': orderId }});
-  httpLink = new HttpLink({ uri: `http://localhost:${RAILS_PORT}/graphql`, headers: { 'Authorization': `Bearer ${authToken}` }});
+  httpLink = new HttpLink({ uri: `http://localhost:${RAILS_PORT}/graphql`, headers: { 'Order-ID': orderId }});
+  // httpLink = new HttpLink({ uri: `http://product-marketplace-staging-1578308111.us-east-2.elb.amazonaws.com:${RAILS_PORT}/graphql`, headers: { 'Order-ID': orderId }});
+  // httpLink = new HttpLink({ uri: `http://localhost:${RAILS_PORT}/graphql`, headers: { 'Authorization': `Bearer ${authToken}` }});
 
   // console.log(cable);
   // console.log(webSocketLink);
